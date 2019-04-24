@@ -1,0 +1,2 @@
+Gene	S1.t1r.	S1.t2r.	S1.t3r.	S2.t1r.	S2.t2r.	S2.t3r.
+anti-PD1 favor score	NaN	NaN	NaN	NaN	NaN	NaN

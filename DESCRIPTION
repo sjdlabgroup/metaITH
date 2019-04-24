@@ -1,0 +1,10 @@
+Package: metaITH
+Title: A Tool for Analyzing Intratumor Heterogeneity at Multiple Levels
+Version: 0.0.0.9000
+Authors@R: person("Elise", "Merritt", email = "em575@scarletmail.rutgers.edu", role = c("aut", "cre"))
+Description: This package allows for analysis of intratumor heterogeneity at the DNA, RNA, and immunogenic levels.
+Depends: R (>= 3.5.0), ggplot2, reshape2, ape, phylobase, dplyr, matrixStats
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1

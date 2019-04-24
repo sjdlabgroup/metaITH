@@ -1,0 +1,3 @@
+Gene	S1.t1r.	S1.t2r.	S1.t3r.	S2.t1r.	S2.t2r.	S2.t3r.
+Epithelial score	NaN	NaN	NaN	NaN	NaN	NaN
+Mesenchymal score	NaN	NaN	NaN	NaN	NaN	NaN
