@@ -17,7 +17,7 @@ library(matrixStats)
 #' @example metaITH_analysis(DNA_phylo_list.txt, RNA_phylo_list.txt, Immune_phylo_list.txt, sample_names.txt, S1_RNA_expresion_matrix.txt)
 #' @export
 metaITH_analysis=function(dna_phylo_list, rna_phylo_list, immune_phylo_list, multi_region_sample_names, rna_expression_matrix){
-file <- dna_phylo_list
+file <- read.table(dna_phylo_list)
 for (m in 1:length(file[,1])) 
 {
 
@@ -176,7 +176,7 @@ sum.length.RNA=c()
 sum.length.immune=c()
 
 
-samnames <-multi_region_sample_names
+samnames <-read.table(multi_region_sample_names)
 
 dN_DNA=c()
 dN_RNA=c()
@@ -185,8 +185,8 @@ dN_color=c()
 colz=c("brown3","darkgoldenrod3","darkgreen","deepskyblue","purple","hotpink")
 
 for(i in 1:length(samnames)) {
-  dnafile=paste0("DNA_distance_matrix_",samnames[i,1],"_SNV_frequency_matrix.txt")
-  rnafile=paste0("RNA_distance_matrix_",samnames[i,1],"_RNA_expression_matrix.txt")
+  dnafile=paste0("DNA_distance_matrix_DNA_",samnames[i,1],"_frequency_matrix.txt")
+  rnafile=paste0("RNA_distance_matrix_",samnames[i,1],"_RNA_expresion_matrix.txt")
   immunefile=paste0("Immune_distance_matrix_",samnames[i,1],"_Immune_CIBERSORT_matrix.txt")
   
   z1<-read.table(dnafile,sep="\t",skip=1,fill=TRUE,header=F)
@@ -253,7 +253,7 @@ dev.off()
 ############################################################################### Signatures #####################################################################
 # z-score calculations
 # ====================
-orimatrix=read.table(rna_expression_matrix)
+orimatrix=read.table(rna_expression_matrix, sep='\t', header=T)
 nr_matrix=dplyr::select(orimatrix, ends_with("nr"))
 orimatrix=dplyr::select(orimatrix, -ends_with("nr"))
 names(orimatrix)[1]="Gene"
@@ -296,11 +296,11 @@ write.table(z2, "Hypoxia_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Hypoxia_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Hypoxia_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "darkorchid4") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 
@@ -318,11 +318,11 @@ write.table(z2, "Proliferation_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Proliferation_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Proliferation_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "deeppink3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 
@@ -340,11 +340,11 @@ write.table(z2, "Apoptosis_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Apoptosis_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Apoptosis_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "deeppink3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 
@@ -362,11 +362,11 @@ write.table(z2, "Pemetrexed_resistance_score.txt", quote=F, sep="\t", row.names=
 x<-read.table("Pemetrexed_resistance_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Pemetrexed_resistance_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "cyan3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 
@@ -395,11 +395,11 @@ write.table(ME2, "Mesenchymal-Epithelial_score.txt", quote=F, sep="\t", row.name
 x<-read.table("Mesenchymal-Epithelial_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Mesenchymal-Epithelial_score_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "yellow3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 
@@ -416,11 +416,11 @@ write.table(z2, "anti-PD1_favor_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("anti-PD1_favor_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("anti-PD1_favor_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "darkgreen") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 

@@ -15,7 +15,7 @@ library(matrixStats)
 #' @example snv_heatmaps(DNA_phylo_list.txt)
 #' @export
 snv_heatmaps=function(dna_phylo_list_file){
-file <- read.table(dna_phylo_list_file)
+file <- read.table(dna_phylo_list_file, header=F, sep="\n")
 for (m in 1:length(file[,1])) 
 {
 
@@ -343,11 +343,11 @@ specified_geneset_signature=function(z_score_matrix_file, geneset){
   x<-read.table("Geneset_score.txt", header=T, sep="\t")
   x1<-melt(x,id="Gene")
   tiff("Geneset_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-  ggplot(x1, aes(variable, Gene, fill=value))+ 
+  print(ggplot(x1, aes(variable, Gene, fill=value))+ 
     geom_tile() + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
     scale_fill_gradient(low = "white", high = "darkorchid4") + 
-    coord_equal()
+    coord_equal())
   dev.off()
   
 }
@@ -372,11 +372,11 @@ write.table(z2, "Hypoxia_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Hypoxia_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Hypoxia_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "darkorchid4") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 }
@@ -403,11 +403,11 @@ write.table(z2, "Proliferation_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Proliferation_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Proliferation_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "deeppink3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 }
 
@@ -434,11 +434,11 @@ write.table(z2, "Apoptosis_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("Apoptosis_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Apoptosis_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "deeppink3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 }
@@ -465,11 +465,11 @@ write.table(z2, "Pemetrexed_resistance_score.txt", quote=F, sep="\t", row.names=
 x<-read.table("Pemetrexed_resistance_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Pemetrexed_resistance_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "cyan3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 }
@@ -507,11 +507,11 @@ write.table(ME2, "Mesenchymal-Epithelial_score.txt", quote=F, sep="\t", row.name
 x<-read.table("Mesenchymal-Epithelial_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("Mesenchymal-Epithelial_score_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "yellow3") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 }
@@ -537,11 +537,11 @@ write.table(z2, "anti-PD1_favor_score.txt", quote=F, sep="\t", row.names=F)
 x<-read.table("anti-PD1_favor_score.txt", header=T, sep="\t")
 x1<-melt(x,id="Gene")
 tiff("anti-PD1_favor_scores_heatmap.tiff", units="in", height = 8, width = 8, res=300)
-ggplot(x1, aes(variable, Gene, fill=value))+ 
+print(ggplot(x1, aes(variable, Gene, fill=value))+ 
   geom_tile() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size= 10),axis.text.y = element_text(size =10,color ="black"), plot.title = element_blank(),axis.title.x = element_blank(), axis.title.y = element_blank(), legend.position="bottom") + 
   scale_fill_gradient(low = "white", high = "darkgreen") + 
-  coord_equal()
+  coord_equal())
 dev.off()
 
 }
