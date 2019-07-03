@@ -67,7 +67,7 @@ for(i in 1:(nCols-1)){
     }
 }
 
-dimnames(distMat) <- list(colnames(x1))
+dimnames(distMat) <- list(colnames(x1), colnames(x1))
 diag(distMat) <- 0
 tree <- nj(distMat)
 
@@ -107,7 +107,7 @@ for (m in 1:length(file[,1]))
     }
   }
   
-  dimnames(distMat) <- list(colnames(x1))
+  dimnames(distMat) <- list(colnames(x1), colnames(x1))
   diag(distMat) <- 0
   tree <- nj(distMat)
   
@@ -145,7 +145,7 @@ for (m in 1:length(file[,1]))
     }
   }
   
-  dimnames(distMat) <- list(colnames(x1))
+  dimnames(distMat) <- list(colnames(x1), colnames(x1))
   diag(distMat) <- 0
   tree <- nj(distMat)
   
