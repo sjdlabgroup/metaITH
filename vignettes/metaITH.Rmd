@@ -42,20 +42,22 @@ vignette: >
 
 
 **Description**  
-This function must be run before doing any signature analysis function. The input is an RNA expression matrix containing the expression level of all genes in all tumor samples and normals. The input file must be placed manually in metaITH/R directory. The output is a matrix (tab-delimited text file) containing z-scores for all genes in all of the tumor samples or regions and normals. NOTE: All normal samples must end in ".nr" and all tumor samples must not end in ".nr"
+Calculates z-scores for all genes in all tumor samples. This function must be run before doing any signature analyses.
 
-**Usage**  
+**Usage**    
 z_score_calculations(rna_expression_matrix_file)
 
 **Arguments**  
 
-* rna_expression_matrix_file: File containing expression level of all genes in all tumor samples. Header of first column should be "Gene" and the header of any column with data from normal samples should end in ".nr".
+* rna_expression_matrix_file: Tab delimited text file containing expression level of all genes in all tumor and normal samples.
+* Gene names as rows with header "Gene" and samples as columns
+* Headers of normal samples should end in ".nr" and headers of tumor samples should not end in ".nr"
 
 **Details**  
-This function takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals and creates a matrix (tab-delimited text file) containing z-scores for all genes in all of the tumor samples or regions and normals.
+Takes in RNA expression matrix containing the expression level (log2(TPM+1) or other measure) of all genes in all tumor and normal samples. Output is a matrix containing z-scores for all genes in the entire tumor samples and writes a tab-delimited text file. Z-score for each gene in each tumor sample is calculated using mean and standard deviation calculated form respective gene expression across all normal samples.
 
 **Value**  
-
+This function returns one file:    
 1. A table of z-score values. First column contains all genes found in RNA expression matrix. Subsequent columns contain z-score of each gene for each sample.  
 
 
@@ -79,24 +81,23 @@ read.table("z-scores_matrix.txt", sep="\t", header=T)[1:4,1:4]
 ---   
 
 **Description**  
-The input file is a z-score matrix created by function z_score_calculations. The input file must be in metaITH/R directory, which is automatically done by function z_score_calculations.
-The function outputs a table of anti-PD1 favor scores for each tumor sample or region and a heatmap of the anti-PD1 favor scores.
+Calculates anti-PD1 favor score for each tumor sample using gene expression data [log2 (TPM+1)] for 28 genes that comprise of anti-PD1 favor signature (Gibney et al., 2016). This score is a measure of responsiveness against anti-PD1 therapy. Higher score represents higher responsiveness.  
 
 **Usage**  
 anti_pd1_favor_signature(z_score_matrix_file)  
   
 **Arguments**  
 
-+ z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should be created by running the function z_score_calculations.
++ z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function "z_score_calculations" will create this file.
 
 **Details**  
 Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of anti-PD1 favor scores for each tumor sample or region and a heatmap of the anti-PD1 favor scores.
+Outputs a table of anti-PD1 favor scores for each tumor sample or region and a heatmap of the anti-PD1 favor scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then anti-PD1 favor score for each tumor sample is defined as mean z-scores of 28 genes involved. 
 
 **Value**  
-
-1. A table of anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample.  
-2. A tiff formatted image file  
+This function returns two files:   
+1. A tab-delimited text file with anti-PD1 scores. First column is "Gene," followed by one column for each tumor region or sample. Two rows, one for sample names, one called “anti-PD1 favor score” shows the anti-PD1 favor score for each tumor region or sample.    
+2. A .tiff image file of a heatmap
 
 
 **Example**  
@@ -116,24 +117,23 @@ read.table("anti-PD1_favor_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**  
-Input is a z-score matrix created by function z_score_calculations. Input file must be in metaITH/R directory, which is automatically done by function z_score_calculations.
-Outputs a table of apoptosis scores for each tumor sample or region and a heatmap of the apoptosis scores.
+Apoptosis score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 6 genes known to be associated with apoptosis. This score is a measure of apoptotic activity. Higher score represents more apoptosis.  
 
 **Usage**  
 apoptosis_signature(z_score_matrix_file)
 
 **Arguments**  
 
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should created by running the function z_score_calculations.
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file.  
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of apoptosis scores for each tumor sample or region and a heatmap of the apoptosis scores.
+
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of apoptosis scores for each tumor sample or region and a heatmap of the apoptotic scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then apoptotic score for each tumor sample is defined as mean z-scores of 6 genes involved. 
 
 **Value**  
-
+This function returns two files:     
 1. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  
-2. A tiff formatted image file  
+2. A .tiff image file of a heatmap
 
 
 **Example** 
@@ -152,24 +152,22 @@ read.table("Apoptosis_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**  
-Input is a z-score matrix created by function z_score_calculations. Input file must be in metaITH/R directory, which is automatically done by function z_score_calculations. 
-Outputs a table of drug-resistance scores for each tumor sample or region and a heatmap of the drug-resistance scores.
+Drug resistance score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 23 genes that comprise of Drug resistance signature (Hou et al., 2012). This score is a measure of Pemetrexed drug resistance. Higher score represents higher resistance.  
 
 **Usage**  
 drug_resistance_signature(z_score_matrix_file)
 
 **Arguments**  
 
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should be created by running function z_score_calculations.
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. 
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of drug-resistance scores for each tumor sample or region and a heatmap of the drug-resistance scores.
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Drug resistance scores for each tumor sample or region and a heatmap of the Drug resistance scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Drug resistance score for each tumor sample is defined as mean z-scores of 23 genes involved. 
 
 **Value**  
-
-1. A table of drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample.  
-2. A tiff formatted image file  
+This function returns two files:     
+1. A tab delimited .txt file with Drug resistance scores. First column is “Gene”, followed by one column for each tumor region or sample. Two rows, one for sample names, one called “Drug resistance score” shows the Drug resistance score for each tumor region or sample.    
+2. A .tiff image file of a heatmap
 
 
 **Example**  
@@ -187,24 +185,25 @@ read.table("Pemetrexed_resistance_score.txt", sep="\t", header=T)[,1:4]
 ---  
 
 **Description**  
-Input is a z-score matrix created by function z_score_calculations. Input file must be in metaITH/R directory, which is automatically done by function z_score_calculations.
-Outputs a table of emt(epithelial-mesenchymal transition) scores for each tumor sample or region and a heatmap of the emt scores.
+EMT score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 60 genes that comprise of EMT signature (Ramaker et al., 2017). This gene signature includes 49 epithelial related genes (e-genes) and 11 mesenchymal related genes (m-genes). This score is a measure of epithelial/mesenchymal nature of the tumor. Higher score represents more mesenchymal like features.  
 
 **Usage**  
 emt_signature(z_score_matrix_file)
 
 **Arguments**  
 
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should be created using function z_score_calculations.
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. 
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of emt(epithelial-mesenchymal transition) scores for each tumor sample or region and a heatmap of the emt scores.
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of EMT scores for each tumor sample and a heatmap of the EMT scores. For each of e-genes and m-genes, z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then EMT score for each tumor sample is defined as: 
+EM score = av. Z-score of m-genes – av. z-score of e-genes 
+
 
 **Value**  
+This function returns three files:    
 1. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample.  
 2. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  
-3. A tiff formatted image file  
+3. A .tiff image file of a heatmap
 
 **Example**  
 ```{r}
@@ -222,24 +221,22 @@ read.table("Mesenchymal-Epithelial_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**   
-Input is a z-score matrix created by function z_score_calculations. Input file must be in metaITH/R directory, which is automatically done by function z_score_calculations.
-Outputs a table of hypoxia scores for each tumor sample or region and a heatmap of the hypoxia scores.  
+Hypoxia score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 21 genes that comprise of Hypoxia signature (Buffa et al., 2010). This score is a measure of extent of hypoxia in tumors. Higher score represents more hypoxia.  
 
 **Usage**  
 hypoxia_signature(z_score_matrix_file)  
 
 **Arguments**   
 
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should be created using function z_score_calculations.  
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file.   
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of hypoxia scores for each tumor sample or region and a heatmap of the hypoxia scores.  
+ Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Hypoxia scores for each tumor sample or region and a heatmap of the Hypoxia scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Hypoxia score for each tumor sample is defined as mean z-scores of the genes involved. 
 
 **Value**  
-
+This function returns two files:    
 1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample.  
-2. A tiff formatted image file  
+2. A .tiff image file of a heatmap
 
 **Example** 
 ```{r}
@@ -256,24 +253,22 @@ read.table("Hypoxia_score.txt", sep="\t", header=T)[,1:4]
 ---  
 
 **Description**  
-Input is a z-score matrix created by function z_score_calculations. Input file must be in metaITH/R directory, which is automatically done by function z_score_calculations.
-Outputs a table of proliferation scores for each tumor sample or region and a heatmap of the proliferation scores.
+Proliferation score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 121 genes that comprise of Proliferation signature (Wilkerson et al., 2012). This score is a measure of proliferation potential. Higher score represents higher proliferation potential. 
 
 **Usage**   
 proliferation_signature(z_score_matrix_file)  
 
 **Arguments**   
 
-*    z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. This file should be created using function z_score_calculations.  
+*    z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions.  Running the function “z_score_calculations” will create this file. 
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of proliferation scores for each tumor sample or region and a heatmap of the proliferation scores. 
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Proliferation scores for each tumor sample and a heatmap of the Proliferation scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Proliferation score for each tumor sample is defined as mean z-scores of the genes involved. 
 
 **Value**  
-
+This function returns two files:    
 1. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample.  
-2. A tiff formatted image file  
+2. A .tiff image file of a heatmap
 
 
 **Example** 
@@ -292,26 +287,24 @@ read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**  
-Takes in a z-score matrix created by function z_score_calculations and a geneset. Input file z-core matrix must be in metaITH/R directory, which is automatically done by function z_score_calculations. The geneset must be placed in the metaITH/R directory manually.
-Outputs a table of geneset scores and a geneset scores heatmap.
+z-score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for user specified number of genes (in the form of a gene list). 
 
 **Usage**  
 specified_geneset_signature(z_score_matrix_file, geneset)
 
 **Arguments**  
 
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Can be created using function z_score_calculations.  
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. 
 
-* geneset: A text file containing a list of genes supplied by the user, one gene per line.  
+* geneset: A text file containing a list of genes supplied by the user, one gene per row, with the header "Gene".  
 
 **Details**  
-Takes in a z-score matrix created by function z_score_calculations and a geneset.
-Outputs a table of geneset scores and a geneset scores heatmap.
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of scores for each tumor sample and a heatmap of the scores. For each gene, z-scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then score for each tumor sample is defined as mean z-scores of the genes involved. 
 
 **Value**  
-
+This function returns two files:     
 1. A table of geneset scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Geneset" score" shows the geneset score for each tumor region or sample.  
-2. A tiff formatted image file  
+2. A .tiff image file of a heatmap
 
 
 **Example** 
@@ -330,47 +323,48 @@ read.table("Geneset_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**  
-Input is a RNA expression matrix containing the expression level of all genes in all tumor samples and normals. NOTE: All normal samples should end in ".nr" and all tumor samples should not end in ".nr". Input file must be placed manually in metaITH/R directory.
-Creates a z-score matrix and uses this matrix to find the hypoxia, proliferation, apoptosis, drug-resistance, emt, and anti-PD1 favor scores for each tumor sample or region. Outputs a table and heatmap of these scores.
+Proliferation, hypoxia, EMT, apoptosis, anti-PD1 favor and drug resistance scores are calculated for each tumor sample using gene expression data [log2 (TPM+1)] for genes that comprise of respective signatures. This one function calculates all scores in one go.
 
 **Usage**  
 signature_analysis(rna_expression_matrix_file)
 
 **Arguments**  
 
-* rna_expression_matrix_file: File containing expression level of all genes in all tumor samples. Header of first column should be "Gene" and each normal file should end in ".nr"
+* rna_expression_matrix_file: Tab delimited file containing expression level of all genes in all tumor and normal samples. 
+* Gene names as rows with header “Gene” and samples as columns. 
+* Headers of normal samples should end in “.nr” and headers of tumor samples should not end in “.nr”.
 
 **Details**  
-Takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals.
-Creates a z-score matrix and uses this matrix to find the hypoxia, proliferation, apoptosis, drug-resistance, emt, and anti-PD1 favor scores for each tumor sample or region. Outputs a table and heatmap for each of these scores.
+Takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals. Creates a z-score matrix and uses this matrix to find the hypoxia, proliferation, apoptosis, drug-resistance, emt, and anti-PD1 favor scores for each tumor sample or region. Outputs a table and heatmap for each of these scores. 
 
 **Value**  
+This function returns thirteen files:    
 
-1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample.   
+1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample.       
 
-2. A tiff formatted image file visualizing the hypoxia scores  
+2. A .tiff image file visualizing the hypoxia scores as a heatmap 
 
 3. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample.  
 
-4. A tiff formatted image file visualizing the proliferation scores  
+4. A .tiff image file visualizing the proliferation scores as a heatmap
 
 5. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  
 
-6. A tiff formatted image file visualizing the apoptosis scores  
+6. A .tiff image file visualizing the apoptosis scores as a heatmap
 
 7. A table of drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample.  
 
-8. A tiff formatted image file visualizing the drug-resistance scores  
+8. A .tiff image file visualizing the drug-resistance scores as a heatmap
 
 9. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample.  
 
 10. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  
 
-11. A tiff formatted image file visualizing the mesenchymal-epithelial scores  
+11. A .tiff image file visualizing the mesenchymal-epithelial scores as a heatmap
 
 12. A table of anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample.  
 
-13. A tiff formatted image file visualizing the anti-PD1 scores 
+13. A .tiff image file visualizing the anti-PD1 scores as a heatmap
 
 
 **Example**  
@@ -393,25 +387,23 @@ read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
 
 
 **Description**  
-Takes in a text file containing list of sample files. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal. The input text file and all the sample files must be placed in the metaITH/R directory.
-Creates a DNA distance matrix, containing the distance between all the tumor regions and normal, a DNA tree topology file, and an unrooted DNA phylogram.
+Calculates distance matrix from variant allele frequency data of different regions of a tumor and normal samples and generates a unrooted dendrogram from it using neighbor joining method. Apart from multi-region sequencing data, it could also be for any set of tumor or normal samples.
 
 **Usage**  
 dna_phylograms(dna_phylo_list_file)
 
 **Arguments**  
 
-* dna_phylo_list_file: A text file containing a list of sample files, one file name per line. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal.
+* dna_phylo_list_file: A text file containing a list of sample files, one file name per line. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal (see example datasets).
 
 **Details**
-Takes in a text file containing list of sample files. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal.
-Creates a DNA distance matrix, containing the distance between all the tumor regions and normal, a DNA tree topology file, and an unrooted DNA phylogram.
+Takes in a text file containing list of file names. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal. Creates a DNA distance matrix, containing the distance between all the tumor regions and normal, a DNA tree topology file, and an unrooted DNA phylogram. Distance is defined as the average difference of variant allele frequencies across all variations between any two regions (or samples).
 
 **Value**  
-
-1. DNA distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-2. A text file containing a DNA distance tree
-3. A tiff formatted image file
+This function returns three files:    
+1. DNA distance matrix is a matrix of all samples v/s all samples. Each entry in the table corresponds to the distance between the row sample and column sample.      
+2. A text file containing information about the tree topology.       
+3. A .tiff image file of an unrooted dendrogram     
 
 **Example**
 ```{r}
@@ -427,25 +419,23 @@ read.table("DNA_distance_matrix_DNA_S1_frequency_matrix.txt", sep="\t", header=T
 
 
 **Description**  
-Takes in a text file containing list of sample files. The input text file and all the sample files must be placed in the metaITH/R directory.
-The function then uses the data in the text file to create an immune distance matrix, containing the distance between all the tumor regions and normal, an immune tree topology file, and an unrooted phylogram.
+Calculates distance matrix from proportion of different immune cell types data (output obtained from CIBERSORT) of different regions of a tumor and normal samples and generates a unrooted dendrogram from it using neighbor joining method. Apart from multi-region sequencing data, it could also be for any set of tumor or normal samples.
 
 **Usage**  
 immune_phylograms(immune_phylo_list_file)
 
 **Arguments**  
 
-* immune_phylo_list_file: A text file containing a list of sample files, one file name per line. Each file contains a matrix with proportion of immune cells (inferred by CIBERSORT) of all immune cell types in each tumor region and normal.
+* immune_phylo_list_file: A text file containing a list of sample files, one file name per row. Each file contains a matrix of immune cell proportions of different immune cell types in each tumor region and normal (see example datasets). 
 
 **Details**  
-Takes in a text file containing list of sample files. 
-The function then uses the data in the text file to create an immune distance matrix, containing the distance between all the tumor regions and normal, an immune tree topology file, and an unrooted phylogram.  
+Takes in a text file containing list of file names. Each file contains a matrix with different immune cell type proportions in each tumor region and normal. Creates a immune distance matrix, containing the distance between all the tumor regions and normal, a immune tree topology file, and an unrooted immune phylogram. Distance is defined as the average difference of immune cell type proportions across all cell types between any two regions (or samples).
 
 **Value**  
-
-1. Immune distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-2. A text file containing a immune distance tree
-3. A tiff formatted image file  
+This function returns three files:    
+1. Immune distance matrix is a matrix of all samples versus all samples. Each entry in the table corresponds to the distance between the row sample and column sample.     
+2. A text file containing information about the tree topology.     
+3. A .tiff image file of an unrooted dendrogram     
 
 **Example**  
 ```{r}
@@ -462,25 +452,24 @@ read.table("Immune_distance_matrix_S1_Immune_CIBERSORT_matrix.txt", sep="\t", he
 
 
 **Description**  
-Takes in a text file containing list of sample files. The input text file and all the sample files must be placed in the metaITH/R directory.
-Creates a RNA distance matrix, containing the distance between all the tumor regions and normal, a RNA tree topology file, and a RNA unrooted phylogram.
+Calculates distance matrix from gene expression data (log2(TPM+1)) of different regions of a tumor and normal samples and generates a unrooted dendrogram from it using neighbor joining method. Apart from multi-region sequencing data, it could also be for any set of tumor or normal samples.
 
 **Usage**  
 rna_phylograms(rna_phylo_list_file)
 
 **Arguments**  
 
-* rna_phylo_list_file: A text file containing a list of sample files, one file name per line. Each file contains a matrix with expression values (preferably log2(TPM+1)) of all the genes in each tumor region and normal.
+* rna_phylo_list_file: A text file containing a list of sample files, one file name per row. Each file contains a matrix with gene expression data (log2(TPM+1)) of all the genes in each tumor region and normal (see example datasets). 
 
 **Details**  
-Takes in a text file containing list of sample files. 
-Creates a RNA distance matrix, containing the distance between all the tumor regions and normal, a RNA tree topology file, and a RNA unrooted phylogram.
+
+Takes in a text file containing list of file names. Each file contains a matrix with gene expression data of all genes in each tumor region and normal. Creates a RNA distance matrix, containing the distance between all the tumor regions and normal, a RNA tree topology file, and an unrooted RNA phylogram. Distance is defined as the average difference of gene expression values across all genes between any two regions (or samples).
 
 **Value**  
-
-1. RNA distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-2. A text file containing a RNA distance tree
-3. A tiff formatted image file  
+This function returns three files:     
+1. RNA distance matrix is a matrix of all samples versus all samples. Each entry in the table corresponds to the distance between the row sample and column sample.      
+2. A text file containing information about the tree topology.      
+3. A .tiff image file of an unrooted dendrogram     
 
 **Example**  
 ```{r}
@@ -496,23 +485,21 @@ read.table("RNA_distance_matrix_S1_RNA_expresion_matrix.txt", sep="\t", header=T
 ---  
 
 **Description**  
-Takes in text file containing list of sample files. The input text file and all the sample files must be placed in the metaITH/R directory. 
-Outputs a heatmap of variant allele frequency (vaf) of all variations for each sample.
+Generates a heatmap of variant allele frequencies of somatic variations in different regions of one tumor.
 
-**Usage**  
+**Usage** 
 snv_heatmaps(dna_phylo_list_file)
 
 **Arguments**   
 
-* dna_phylo_list_file: A text file containing a list of sample files, one file name per line. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal.
+* dna_phylo_list_file: A text file containing a list of sample files, one file name per row. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal (see example datasets). 
 
-**Details**  
-Takes in text file containing list of sample files.  
-Outputs a heatmap of variant allele frequency (vaf) of all variations for each sample.
+**Details**       
+Takes in a text file containing list of file names. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal. Creates a heatmap of the variant allele frequencies.
 
 **Value**  
-
-1. A tiff formatted image file 
+This function returns one file:       
+1. A .tiff image file of a heatmap
 
 **Example** 
 ```{r}
@@ -530,8 +517,7 @@ snv_heatmaps("DNA_phylo_list.txt")
 
 
 **Description**  
-Takes in text file containing list of samples, one sample per line, and distance matrix files generated by dna_phylograms, rna_phylograms, and immune_phylograms methods. The input text file and all the sample files must be placed in the metaITH/R directory. the distance matrix file will be automatically placed in the metaITH/R directory by the functions dna_phylograms, rna_phylograms, and immune_phylograms.
-Outputs a png file containing 6 plots, 3 diversity/divergence plots and 3 diversity plots.
+Provides an estimate of the ratio of intra-patient regional diversity to tumor-benign tissue divergence.   
 
 
 **Usage**  
@@ -542,13 +528,11 @@ multi_level_divergence_diversity(sample_names_file)
 *  sample_names_file: A text file containing list of sample names, one file name per line
 
 **Details**
-Takes in text file containing list of samples, one sample per line, and distance matrix files generated by dna_phylograms, rna_phylograms, and immune_phylograms methods.
-Outputs a png file containing 6 plots, 3 diversity/divergence plots and 3 diversity plots.
-NOTE: Requires output of functions dna_phylograms, rna_phylograms, and immune_phylograms to be in same folder.
+Takes in text file containing list of samples, one sample per line, and distance matrix files generated by dna_phylograms, rna_phylograms, and immune_phylograms methods. Outputs a png file containing 6 plots, 3 diversity/divergence plots and 3 diversity plots. NOTE: Requires output of functions dna_phylograms, rna_phylograms, and immune_phylograms to be in same folder 
 
 **Value**  
-
-1. A png formatted image file  
+This function returns one file:       
+1. A .png image file  
 
 **Example**
 ```{r}
@@ -566,7 +550,7 @@ multi_level_divergence_diversity("sample_names.txt")
 
 
 **Description**   
-Analyzes several sample files by running a phylogram analysis (using DNA, RNA, and immune expression data), signature analysis (using RNA expression data), and multi-region diversity and divergence analysis (using DNA, RNA, and immune expression data). All input files must be placed in metaITH/R directory.  
+Runs a comprehensive intra-tumor heterogeneity analyses including dendrogram analysis (using DNA, RNA, and immune expression data), signature analysis (using RNA expression data), and multi-region diversity and divergence analysis (using DNA, RNA, and immune expression data) in one go.  
 
 **Usage**   
 metaITH_analysis(dna_phylo_list, rna_phylo_list, immune_phylo_list, multi_region_sample_names, rna_expression_matrix)  
@@ -587,42 +571,53 @@ metaITH_analysis(dna_phylo_list, rna_phylo_list, immune_phylo_list, multi_region
 Analyzes several sample files by running a phylogram analysis (using DNA, RNA, and immune expression data), signature analysis (using RNA expression data), and multi-region diversity and divergence analysis (using DNA, RNA, and immune expression data).  
 
 **Value**  
+This function returns twenty-three files:    
 
-1. DNA distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-2. A text file containing a DNA distance tree
-3. A tiff formatted image file showing a DNA phylogram
-4. RNA distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-5. A text file containing a RNA distance tree
-6. A tiff formatted image file showing a RNA phylogram
-7. immune distance matrix is a table with one column and one row for each tumor sample or region. Each entry in the table corresponds to the distance between the row sample and column sample. The distance between a sample and itself is 0.
-8. A text file containing an immune distance tree
-9. A tiff formatted image file showing an immune phylogram
-10. A png formatted image file containing 6 plots, 3 diversity/divergence plots and 3 diversity plots
-11. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample.   
+1. DNA distance matrix is a matrix of all samples versus all samples. Each entry in the table corresponds to the distance between the row sample and column sample.     
 
-12. A tiff formatted image file visualizing the hypoxia scores  
+2. A text file containing information about the DNA tree topology    
 
-13. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample.  
+3. A .tiff image file of an unrooted DNA dendrogram     
 
-14. A tiff formatted image file visualizing the proliferation scores  
+4. RNA distance matrix is a matrix of all samples versus all samples. Each entry in the table corresponds to the distance between the row sample and column sample.     
 
-15. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  
+5. A text file containing information about the RNA tree topology    
 
-16. A tiff formatted image file visualizing the apoptosis scores  
+6. A .tiff image file of an unrooted RNA dendrogram    
 
-17. A table of drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample.  
+7. Immune distance matrix is a matrix of all samples versus all samples. Each entry in the table corresponds to the distance between the row sample and column sample.    
 
-18. A tiff formatted image file visualizing the drug-resistance scores  
+8. A text file containing information about the immune tree topology    
 
-19. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample.  
+9. A .tiff image file showing an unrooted immune dendrogram    
 
-20. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  
+10. A .png image file containing 6 plots, 3 diversity/divergence plots and 3 diversity plots 
 
-21. A tiff formatted image file visualizing the mesenchymal-epithelial scores  
+11. A tab delimited .txt file with hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample.      
 
-22. A table of anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample.  
+12. A .tiff image file visualizing the hypoxia scores as a heatmap
 
-23. A tiff formatted image file visualizing the anti-PD1 scores
+13. A tab delimited .txt file with proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample.  
+
+14. A .tiff image file visualizing the proliferation scores as a heatmap
+
+15. A tab delimited .txt file with apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  
+
+16. A .tiff image file visualizing the apoptosis scores as a heatmap 
+
+17. A tab delimited .txt file with drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample.  
+
+18. A .tiff formatted image file visualizing the drug-resistance scores as a heatmap
+
+19. A tab delimited .txt file with epithelial and mesenchymal scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample.  
+
+20. A tab delimited .txt file with EMT scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  
+
+21. A .tiff image file visualizing the EMT scores as a heatmap
+
+22. A tab delimited text file with anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample.  
+
+23. A .tiff image file visualizing the anti-PD1 scores as a heatmap
 
 **Example**
 ```{r}
@@ -654,7 +649,15 @@ Multi-Level Divergence and Diversity
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_level_divergence_diversity, 13  
 Utilities  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metaITH_analysis, 14  
-  
+
+\newpage
+
+# References
+1. Gibney, G.T., Weiner, L.M., and Atkins, M.B. (2016). Predictive biomarkers for checkpoint inhibitor-based immunotherapy. Lancet. Oncol. 17, e542–e551. 
+2. Hou, J., Lambers, M., den Hamer, B., den Bakker, M.A., Hoogsteden, H.C., Grosveld, F., Hegmans, J., Aerts, J., and Philipsen, S. (2012). Expression Profiling-Based Subtyping Identifies Novel Non-small Cell Lung Cancer Subgroups and Implicates Putative Resistance to Pemetrexed Therapy. J. Thorac. Oncol. 7, 105–114
+3. Ramaker, R.C., Lasseigne, B.N., Hardigan, A.A., Palacio, L., Gunther, D.S., Myers, R.M., and Cooper, S.J. (2017). RNA sequencing-based cell proliferation analysis across 19 cancers identifies a subset of proliferation-informative cancers with a common survival signature. Oncotarget 8, 38668–38681.
+4. Wilkerson, M.D., Yin, X., Hoadley, K.A., Liu, Y., Hayward, M.C., Cabanski, C.R., Muldrew, K., Miller, C.R., Randell, S.H., Socinski, M.A., et al. (2010). Lung squamous cell carcinoma mRNA expression subtypes are reproducible, clinically important, and correspond to normal cell types. Clin. Cancer Res. 16, 4864–4875.
+5. Buffa, F. M., Harris, A. L., West, C. M., & Miller, C. J. (2010). Large meta-analysis of multiple cancers reveals a common, compact and highly prognostic hypoxia metagene. British journal of cancer, 102(2), 428–435. 
   
 
 ```{r, include = FALSE}
