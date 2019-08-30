@@ -1,32 +1,34 @@
 # metaITH  
 
-A Tool for Analyzing Intratumor Heterogeneity at Multiple Levels  
-README file written by Anchal Sharma  
-Following packages should be installed:  
-install.packages(ggplot2)  
-install.packages(reshape2)  
-install.packages(ape)  
-install.packages(phylobase)  
-install.packages(dplyr)  
+A Tool for Analyzing Intratumor Heterogeneity at Multiple Molecular Levels (DNA, RNA, Immune)
+
+ 
 All the input files should be in the same directory as metaITH.R script.
 
+===========
+# INSTALLATION
+===========
+Explain how to install package-must be downloaded from github
+-NOTE: MUST HAVE R VERSION 3.5
 
-
-
+install.packages(devtools)
+library(devtools)
+install_packages("Elise-Merritt/metaITH")
+library(metaITH)
 
 ============  
-# PHYLOGRAMS  
+# DENDROGRAMS  
 ============  
 Input files:  
-	DNA_phylo_list.txt - name of sample files. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal. Example file (S1_SNV_frequency_matrix.txt) is provided in /example/phylograms/inputs directory. S1 stands for the name of sample. In this example S1 has 3 tumor regions and 1 normal region profiled. Header of the first column should be coords.  
-	RNA_phylo_list.txt - name of sample files. Each file contains a matrix with expression values (preferably log2(TPM+1)) of all the genes in each tumor region and normal. Example file (S1_RNA_expression_matrix.txt) is provided in /example/phylograms/inputs directory. S1 stands for the name of sample. Input file name could be any.  
-	Immune_phylo_list.txt - name of sample files. Each file contains a matrix with proportion of immune cells (inferred by CIBERSORT) of all immune cell types in each tumor region and normal. Example file (S1_Immune_CIBERSORT_matrix.txt) is provided in /example/phylograms/inputs directory. S1 stands for the name of sample. Input file name could be any.  
+	DNA_dendro_list.txt - name of sample files. Each file contains a matrix with variant allele frequency of all the variations in each tumor region and normal. Example file (S1_SNV_frequency_matrix.txt) is provided in /example/dendrograms/inputs directory. S1 stands for the name of sample. In this example S1 has 3 tumor regions and 1 normal region profiled. Header of the first column should be coords.  
+	RNA_dendro_list.txt - name of sample files. Each file contains a matrix with expression values (preferably log2(TPM+1)) of all the genes in each tumor region and normal. Example file (S1_RNA_expression_matrix.txt) is provided in /example/phylograms/inputs directory. S1 stands for the name of sample. Input file name could be any.  
+	Immune_dendro_list.txt - name of sample files. Each file contains a matrix with proportion of immune cells (inferred by CIBERSORT) of all immune cell types in each tumor region and normal. Example file (S1_Immune_CIBERSORT_matrix.txt) is provided in /example/phylograms/inputs directory. S1 stands for the name of sample. Input file name could be any.  
 
 
 Output files:  
 	Distance matrices: 3 distance matrices for each sample one for each DNA, RNA and Immune. It contains distance between all the regions and normal. Example file (DNA_distance_matrix_S1_SNV_frequency_matrix.txt) is provided in /example/phylograms/outputs directory. S1 stands for the name of sample.  
 	Tree topology: 3 tree topology files for each sample one for each DNA, RNA and Immune. Example file (DNA_tree_S1_SNV_frequency_matrix.txt) is provided in /example/phylograms/outputs directory. S1 stands for the name of sample.  
-	Phylogram: 3 phylograms for each sample one for each DNA, RNA and Immune. Example file (DNA_unrooted_phylogram_S1_SNV_frequency_matrix.tiff) is provided in /example/phylograms/outputs directory. S1 stands for the name of sample.	
+	Dendrogram: 3 dendrograms for each sample one for each DNA, RNA and Immune. Example file (DNA_unrooted_phylogram_S1_SNV_frequency_matrix.tiff) is provided in /example/phylograms/outputs directory. S1 stands for the name of sample.	
 	SNV vaf heatmaps: heatmap of variant allele frequency (vaf) of all the variations for a sample in all regions will be made. Example file (SNV_heatmap_DNA_S1_frequency_matrix.txt.tiff) is provided in /example/phylograms/outputs directory. S1 stands for the name of sample.  
 
 
