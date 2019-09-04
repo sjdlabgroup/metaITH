@@ -30,6 +30,18 @@ vignette: >
 \tableofcontents
 \newpage
 
+# Installation
+Must have R version 3.5 or higher before installation
+```{r eval=FALSE}
+install.packages(devtools)
+library(devtools)
+install_packages("Elise-Merritt/metaITH")
+library(metaITH)
+
+```
+
+# Functions
+
 ##   Signatures
 
 
