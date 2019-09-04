@@ -37,8 +37,14 @@ install.packages(devtools)
 library(devtools)
 install_packages("Elise-Merritt/metaITH")
 library(metaITH)
-
 ```
+To run metaITH using example datasets:  
+1. Go to https://github.com/Elise-Merritt/metaITH  
+2. Click on the green "Clone or download" button at the top right and select "Download ZIP"  
+3. Unzip the downloaded folder. Example datasets are in the directory input_files  
+4. Before running any of the code snippets under header "Example" in this vignette, set the working directory to the folder the example file is in.*   
+
+*The folder each example file is in is specified under header "Arguments". For example, to run the first function "z_score_calculations" using provided example dataset "RNA_matrix.txt" you would first set the working directory to metaITH/input_files/sig_analysis_inputs.
 
 # Functions
 
