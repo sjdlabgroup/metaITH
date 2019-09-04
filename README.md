@@ -3,7 +3,7 @@
 metaITH is an R package for analyzing intratumor heterogeneity at the DNA, RNA, and immune levels. Options include a comprehensive signature analysis looking at the anti-PD1, apoptosis, epithelial-mesenchymal, hypoxia, pemetrexed resistance, and proliferation signatures, a dendrogram analysis at the DNA, RNA, and immune levels, and a multiregion divergence and diversity analysis using data at the DNA, RNA, and immune levels. 
 
 
-# INSTALLATION 
+# Installation   
 
 Must have R version 3.5 or higher 
 ```r
@@ -18,9 +18,9 @@ To run metaITH using user-provided datasets, the working directory must be set t
 
 
 
-# USAGE 
-To run all functions below simultaneously, use the function `metaITH_analysis()`
-Example:
+# Usage 
+To run all functions below simultaneously, use the function `metaITH_analysis()`   
+Example:   
 ```r
 metaITH_analysis("DNA_dendro_list.txt", "RNA_dendro_list.txt", "Immune_dendro_list.txt", "sample_names.txt", "RNA_matrix.txt")
 ```
@@ -45,7 +45,7 @@ specified_geneset_signature("z-scores_matrix.txt", "proliferation_signature.txt"
 ## Dendrogram Analysis
 Functions create distance matrices from DNA, RNA, or immune data and use the distance matrices to create unrooted dendrograms using neighbor-joining method, as well as SNV heatmaps.  
 
-Examples  
+Examples:  
 ```r
 dna_dendrograms("DNA_dendro_list.txt")
 rna_dendrograms("RNA_dendro_list.txt")
