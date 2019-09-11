@@ -4,10 +4,12 @@
 \alias{signature_analysis}
 \title{Runs a signature analysis on an RNA expression matrix}
 \usage{
-signature_analysis(rna_expression_matrix_file)
+signature_analysis(rna_expression_matrix_file, type)
 }
 \arguments{
 \item{rna_expression_matrix_file}{File containing expression level of all genes in all tumor samples. Header of first column should be "Gene" and each normal file should end in ".nr"}
+
+\item{type}{String specifying type of analysis. Options are "all", "hypoxia", "proliferation", "apoptosis", "drug-resistance", "emt", "anti-PD1". Default parameter is "all".}
 }
 \description{
 Takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals.

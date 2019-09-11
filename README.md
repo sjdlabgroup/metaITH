@@ -27,18 +27,12 @@ metaITH_analysis("DNA_dendro_list.txt", "RNA_dendro_list.txt", "Immune_dendro_li
 
 ## Signature Analysis
 Functions calculate specific signature scores for the anti-PD1, apoptosis, epithelial-mesenchymal, hypoxia, pemetrexed resistance, and proliferation signatures, that calculate all the above signature scores, and that calculate the signature scores for a geneset supplied by the user. All functions also create a heatmap of the scores.
-Functions that calculate signature scores for a specific signature take as input a matrix of z-scores that can be created by running the function `z_score_calculations()`  
+The function that calculate signature scores for a user-specificied signature take as input a matrix of z-scores that can be created by running the function `z_score_calculations()`  
 
 Examples:  
 ```r
+signature_analysis("RNA_matrix.txt","all")
 z_score_calculations("RNA_matrix.txt")
-anti_pd1_favor_signature("z-scores_matrix.txt")
-apoptosis_signature("z-scores_matrix.txt")
-emt_signature("z-scores_matrix.txt")
-drug_resistance_signature("z-scores_matrix.txt")
-hypoxia_signature("z-scores_matrix.txt")
-proliferation_signature("z-scores_matrix.txt")
-signature_analysis("RNA_matrix.txt")
 specified_geneset_signature("z-scores_matrix.txt", "proliferation_signature.txt")
 ```
 

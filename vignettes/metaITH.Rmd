@@ -44,7 +44,7 @@ To run metaITH using example datasets:
 3. Unzip the downloaded folder. Example datasets are in the directory input_files  
 4. Before running any of the code snippets under header "Example" in this vignette, set the working directory to the folder the example file is in.*    
 
-*The folder each example file is in is specified under header "Arguments". For example, to run the first function "z_score_calculations" using provided example dataset "RNA_matrix.txt" you would first set the working directory to metaITH/input_files/sig_analysis_inputs.    
+*The folder each example file is in is specified under header "Arguments". For example, to run the first function "signature_analysis" using provided example dataset "RNA_matrix.txt" you would first set the working directory to metaITH/input_files/sig_analysis_inputs.    
 
 To run metaITH using user-provided datasets:   
 1. Set the working directory to the folder that contains the datasets before using any functions. 
@@ -56,6 +56,85 @@ To run metaITH using user-provided datasets:
 
 ---  
 
+### signature_analysis  
+
+---
+
+
+**Description**  
+Proliferation, hypoxia, EMT, apoptosis, anti-PD1 favor and drug resistance scores are calculated for each tumor sample using gene expression data [log2 (TPM+1)] for genes that comprise of respective signatures. This one function can calculate all scores in one go, or a specific analysis for only one signature.
+
+**Usage**  
+signature_analysis(rna_expression_matrix_file, type)
+
+**Arguments**  
+
+* rna_expression_matrix_file: Tab delimited file containing expression level of all genes in all tumor and normal samples. The data may be from bulk sequencing or single cell sequencing data. 
+* Gene names as rows with header “Gene” and samples as columns. 
+* Headers of normal samples should end in “.nr” and headers of tumor samples should not end in “.nr”.
+* Example file "RNA_matrix.txt" can be seen under metaITH/input_files/sig_analysis_inputs.  
+* type: Specifies the type of analysis to be used. Default parameter is "all".   
+Options are:  
+    * "all": Calculates all scores in one go, including proliferation, hypoxia, EMT, apoptosis, anti-PD1 favor, and drug resistance.
+    * "hypoxia": Calculates hypoxia score. See function "hypoxia_signature" for details.
+    * "proliferation": Calculates proliferation score. See function "proliferation_signature" for details.
+    * "apoptosis": Calculates apoptosis score. See function "apoptosis_signature" for details
+    * "drug-resistance": Calculates drug-resistance score. See function "drug_resistance_signature" for details.
+    * "emt": Calculates emt score. See function "emt_signature" for details.
+    * "anti-PD1": Calculates anti-PD1 favor score. See function "anti_PD1_favor_signature" for details
+    
+**Details**  
+Takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals. The expression data may be from bulk sequencing or single cell sequencing data. Creates a z-score matrix and uses this matrix to find the hypoxia, proliferation, apoptosis, drug-resistance, emt, and anti-PD1 favor scores for each tumor sample or region, depending on input string given. Outputs a table and heatmap for each of these scores. 
+
+**Value**  
+This function returns up to thirteen files:    
+
+1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample. Example file "Hypoxia_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.      
+
+2. A .tiff image file visualizing the hypoxia scores as a heatmap. Example file "Hypoxia_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+3. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample. Example file "Proliferation_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+4. A .tiff image file visualizing the proliferation scores as a heatmap. Example file "Proliferation_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+5. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample. Example file "Apoptosis_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+6. A .tiff image file visualizing the apoptosis scores as a heatmap. Example file "Apoptosis_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+7. A table of drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample. Example file "Pemetrexed_resistance_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+8. A .tiff image file visualizing the drug-resistance scores as a heatmap. Example file "Pemetrexed_resistance_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+9. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample. Example file "Epithelial_Mesenchymal_scores.txt" can be seen under metaITH/output_files/sig_analysis_outputs.  
+
+10. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample. Example file "Mesenchymal-Epithelial_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.    
+
+11. A .tiff image file visualizing the mesenchymal-epithelial scores as a heatmap. Example file "Mesenchymal-Epithelial_score_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+12. A table of anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample. Example file "anti-PD1_favor_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+13. A .tiff image file visualizing the anti-PD1 scores as a heatmap. Example file "anti-PD1_favor_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+
+**Example**  
+```{r setup, include=FALSE, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+require("knitr")
+opts_knit$set(root.dir = "~/proliferative_index_files/newid_PC_analysis/metaITH/R")
+```
+```{r echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+library(metaITH)
+```
+```{r}
+
+signature_analysis("RNA_matrix.txt", "all")
+
+read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
+
+```
+
+
+---  
+
 ### z_score_calculations  
                           
 
@@ -63,7 +142,7 @@ To run metaITH using user-provided datasets:
 
 
 **Description**  
-Calculates z-scores for all genes in all tumor samples. This function must be run before doing any signature analyses.
+Calculates z-scores for all genes in all tumor samples. This function must be run before running the function "specified_geneset.
 
 **Usage**    
 z_score_calculations(rna_expression_matrix_file)
@@ -84,225 +163,13 @@ This function returns one file:
 
 
 **Example** 
-```{r setup, include=FALSE, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
-require("knitr")
-opts_knit$set(root.dir = "~/proliferative_index_files/newid_PC_analysis/metaITH/R")
-```
-```{r echo=FALSE, results='hide', warning=FALSE, message=FALSE}
-library(metaITH)
-```
+
 ```{r}
 
 z_score_calculations("RNA_matrix.txt")  
 read.table("z-scores_matrix.txt", sep="\t", header=T)[1:4,1:4]  
   
 ```
-
-
----  
-
-### anti_pd1_favor_signature        
-  
-
----   
-
-**Description**  
-Calculates anti-PD1 favor score for each tumor sample using gene expression data [log2 (TPM+1)] for 28 genes that comprise of anti-PD1 favor signature (Gibney et al., 2016). This score is a measure of responsiveness against anti-PD1 therapy. Higher score represents higher responsiveness.  
-
-**Usage**  
-anti_pd1_favor_signature(z_score_matrix_file)  
-  
-**Arguments**  
-
-+ z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function "z_score_calculations" will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-**Details**  
-Takes in a z-score matrix created by function z_score_calculations.
-Outputs a table of anti-PD1 favor scores for each tumor sample or region and a heatmap of the anti-PD1 favor scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then anti-PD1 favor score for each tumor sample is defined as mean z-scores of 28 genes involved. A list of the 28 genes, "anti-PD1_favor_geneset.txt", is included in metaITH/genesets.
-
-**Value**  
-This function returns two files:   
-1. A tab-delimited text file with anti-PD1 scores. First column is "Gene," followed by one column for each tumor region or sample. Two rows, one for sample names, one called “anti-PD1 favor score” shows the anti-PD1 favor score for each tumor region or sample. Example file "anti-PD1_favor_score.txt" can be seen under output_files/sig_analysis_outputs.   
-2. A .tiff image file of a heatmap. Example file "anti-PD1_favor_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-
-**Example**  
-
-```{r}  
-anti_pd1_favor_signature("z-scores_matrix.txt")  
-read.table("anti-PD1_favor_score.txt", sep="\t", header=T)[,1:4]   
-```
-
-
----  
-
-### apoptosis_signature 
-
----
-
-
-**Description**  
-Apoptosis score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 6 genes known to be associated with apoptosis. This score is a measure of apoptotic activity. Higher score represents more apoptosis.  
-
-**Usage**  
-apoptosis_signature(z_score_matrix_file)
-
-**Arguments**  
-
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-**Details**  
-
-Takes in a z-score matrix created by function z_score_calculations. Outputs a table of apoptosis scores for each tumor sample or region and a heatmap of the apoptotic scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then apoptotic score for each tumor sample is defined as mean z-scores of 6 genes involved. A list of the 6 genes, "apoptosis_geneset.txt", is included in metaITH/genesets.
-
-**Value**  
-This function returns two files:     
-1. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  Example file "Apoptosis_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
-2. A .tiff image file of a heatmap. Example file "Apoptosis_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-
-**Example** 
-
-```{r}
-apoptosis_signature("z-scores_matrix.txt")  
-read.table("Apoptosis_score.txt", sep="\t", header=T)[,1:4]  
-  
-```
-
----  
-
-### drug_resistance_signature   
-
----  
-
-
-**Description**  
-Drug resistance score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 23 genes that comprise of Drug resistance signature (Hou et al., 2012). This score is a measure of Pemetrexed drug resistance. Higher score represents higher resistance.  
-
-**Usage**  
-drug_resistance_signature(z_score_matrix_file)
-
-**Arguments**  
-
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-**Details**  
-Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Drug resistance scores for each tumor sample or region and a heatmap of the Drug resistance scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Drug resistance score for each tumor sample is defined as mean z-scores of 23 genes involved. A list of the 23 genes, "pemetrexed_resistance_geneset.txt", is included in metaITH/genesets.
-
-**Value**  
-This function returns two files:     
-1. A tab delimited .txt file with Drug resistance scores. First column is “Gene”, followed by one column for each tumor region or sample. Two rows, one for sample names, one called “Drug resistance score” shows the Drug resistance score for each tumor region or sample. Example file "Pemetrexed_resistance_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.   
-2. A .tiff image file of a heatmap. Example file "Pemetrexed_resistance_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.  
-
-
-**Example**  
-
-```{r}
-drug_resistance_signature("z-scores_matrix.txt")  
-read.table("Pemetrexed_resistance_score.txt", sep="\t", header=T)[,1:4]  
-
-```
-
----  
-
-### emt_signature   
-
----  
-
-**Description**  
-EMT score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 60 genes that comprise of EMT signature (Ramaker et al., 2017). This gene signature includes 49 epithelial related genes (e-genes) and 11 mesenchymal related genes (m-genes). This score is a measure of epithelial/mesenchymal nature of the tumor. Higher score represents more mesenchymal like features.  
-
-**Usage**  
-emt_signature(z_score_matrix_file)
-
-**Arguments**  
-
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-**Details**  
-Takes in a z-score matrix created by function z_score_calculations. Outputs a table of EMT scores for each tumor sample and a heatmap of the EMT scores. For each of e-genes and m-genes, z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then EMT score for each tumor sample is defined as:    
-EM score = av. Z-score of m-genes – av. z-score of e-genes    
-A list of the 49 epithelial genes, "epithelial_geneset.txt", and a list of the 11 mesenchymal genes, "mesenchymal_geneset.txt" is included in metaITH/genesets.
-
-**Value**  
-This function returns three files:    
-1. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample. Example file "Epithelial_Mesenchymal_scores.txt" can be seen under metaITH/output_files/sig_analysis_outputs.   
-2. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  Example file "Mesenchymal-Epithelial_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-3. A .tiff image file of a heatmap. Example file "Mesenchymal-Epithelial_score_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-**Example**  
-
-```{r}
-emt_signature("z-scores_matrix.txt")
-
-read.table("Mesenchymal-Epithelial_score.txt", sep="\t", header=T)[,1:4]
-```
-
----  
-
-### hypoxia_signature   
-
----  
-
-
-**Description**   
-Hypoxia score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 21 genes that comprise of Hypoxia signature (Buffa et al., 2010). This score is a measure of extent of hypoxia in tumors. Higher score represents more hypoxia.  
-
-**Usage**  
-hypoxia_signature(z_score_matrix_file)  
-
-**Arguments**   
-
-* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-**Details**  
- Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Hypoxia scores for each tumor sample or region and a heatmap of the Hypoxia scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Hypoxia score for each tumor sample is defined as mean z-scores of the genes involved. A list of the 21 genes involved, "hypoxia_geneset.txt", is included in metaITH/genesets.
-
-**Value**  
-This function returns two files:    
-1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample. Example file "Hypoxia_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.    
-2. A .tiff image file of a heatmap. Example file "Hypoxia_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-**Example** 
-
-```{r}
-hypoxia_signature("z-scores_matrix.txt")
-
-read.table("Hypoxia_score.txt", sep="\t", header=T)[,1:4]
-```
-
----  
-
-### proliferation_signature   
-
----  
-
-**Description**  
-Proliferation score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 121 genes that comprise of Proliferation signature (Wilkerson et al., 2012). This score is a measure of proliferation potential. Higher score represents higher proliferation potential. 
-
-**Usage**   
-proliferation_signature(z_score_matrix_file)  
-
-**Arguments**   
-
-*    z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions.  Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-**Details**  
-Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Proliferation scores for each tumor sample and a heatmap of the Proliferation scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Proliferation score for each tumor sample is defined as mean z-scores of the genes involved. A list of the 121 genes involved, "proliferation_geneset.txt", is included in metaITH/genesets.
-
-**Value**  
-This function returns two files:    
-1. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample. Example file "Proliferation_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.  
-2. A .tiff image file of a heatmap. Example file "Proliferation_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-
-**Example** 
-
-```{r}
-proliferation_signature("z-scores_matrix.txt")
-read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
-```
-
 
 ---
 
@@ -342,68 +209,6 @@ read.table("Geneset_score.txt", sep="\t", header=T)[,1:4]
 
 ```
 
----  
-
-### signature_analysis  
-
----
-
-
-**Description**  
-Proliferation, hypoxia, EMT, apoptosis, anti-PD1 favor and drug resistance scores are calculated for each tumor sample using gene expression data [log2 (TPM+1)] for genes that comprise of respective signatures. This one function calculates all scores in one go.
-
-**Usage**  
-signature_analysis(rna_expression_matrix_file)
-
-**Arguments**  
-
-* rna_expression_matrix_file: Tab delimited file containing expression level of all genes in all tumor and normal samples. The data may be from bulk sequencing or single cell sequencing data. 
-* Gene names as rows with header “Gene” and samples as columns. 
-* Headers of normal samples should end in “.nr” and headers of tumor samples should not end in “.nr”.
-* Example file "RNA_matrix.txt" can be seen under metaITH/input_files/sig_analysis_inputs.
-
-**Details**  
-Takes in RNA expression matrix containing the expression level of all genes in all tumor samples and normals. The expression data may be from bulk sequencing or single cell sequencing data. Creates a z-score matrix and uses this matrix to find the hypoxia, proliferation, apoptosis, drug-resistance, emt, and anti-PD1 favor scores for each tumor sample or region. Outputs a table and heatmap for each of these scores. 
-
-**Value**  
-This function returns thirteen files:    
-
-1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample. Example file "Hypoxia_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.      
-
-2. A .tiff image file visualizing the hypoxia scores as a heatmap. Example file "Hypoxia_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-3. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample. Example file "Proliferation_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-4. A .tiff image file visualizing the proliferation scores as a heatmap. Example file "Proliferation_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-5. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample. Example file "Apoptosis_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-6. A .tiff image file visualizing the apoptosis scores as a heatmap. Example file "Apoptosis_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-7. A table of drug-resistance scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Pemetrexed resistance score" shows the drug-resistance score for each tumor region or sample. Example file "Pemetrexed_resistance_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-8. A .tiff image file visualizing the drug-resistance scores as a heatmap. Example file "Pemetrexed_resistance_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-9. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample. Example file "Epithelial_Mesenchymal_scores.txt" can be seen under metaITH/output_files/sig_analysis_outputs.  
-
-10. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample. Example file "Mesenchymal-Epithelial_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.    
-
-11. A .tiff image file visualizing the mesenchymal-epithelial scores as a heatmap. Example file "Mesenchymal-Epithelial_score_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-12. A table of anti-PD1 favor scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "anti-PD1 favor score" shows the anti-PD1 favor score for each tumor region or sample. Example file "anti-PD1_favor_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
-
-13. A .tiff image file visualizing the anti-PD1 scores as a heatmap. Example file "anti-PD1_favor_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
-
-
-**Example**  
-
-```{r}
-
-signature_analysis("RNA_matrix.txt")
-
-read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
-
-```
 
 
 ## Dendrograms
@@ -663,28 +468,238 @@ read.table("DNA_distance_matrix_DNA_S1_frequency_matrix.txt", sep="\t", header=T
 read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
 ```
 
+## Signature Utility Functions
+
+**NOTE:** Functions in this section are included for information purposes only, as they are called by the function "signature_analysis". The recommended way to run an analysis on a specific signature, use the function "signature_analysis" and specify the desired signature as part of the parameter "type".
+
+---  
+
+### anti_pd1_favor_signature        
+  
+
+---   
+
+**Description**  
+Calculates anti-PD1 favor score for each tumor sample using gene expression data [log2 (TPM+1)] for 28 genes that comprise of anti-PD1 favor signature (Gibney et al., 2016). This score is a measure of responsiveness against anti-PD1 therapy. Higher score represents higher responsiveness.  
+
+**Usage**  
+anti_pd1_favor_signature(z_score_matrix_file)  
+  
+**Arguments**  
+
++ z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function "z_score_calculations" will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+**Details**  
+Takes in a z-score matrix created by function z_score_calculations.
+Outputs a table of anti-PD1 favor scores for each tumor sample or region and a heatmap of the anti-PD1 favor scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then anti-PD1 favor score for each tumor sample is defined as mean z-scores of 28 genes involved. A list of the 28 genes, "anti-PD1_favor_geneset.txt", is included in metaITH/genesets.
+
+**Value**  
+This function returns two files:   
+1. A tab-delimited text file with anti-PD1 scores. First column is "Gene," followed by one column for each tumor region or sample. Two rows, one for sample names, one called “anti-PD1 favor score” shows the anti-PD1 favor score for each tumor region or sample. Example file "anti-PD1_favor_score.txt" can be seen under output_files/sig_analysis_outputs.   
+2. A .tiff image file of a heatmap. Example file "anti-PD1_favor_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+
+**Example**  
+
+```{r}  
+anti_pd1_favor_signature("z-scores_matrix.txt")  
+read.table("anti-PD1_favor_score.txt", sep="\t", header=T)[,1:4]   
+```
+
+
+---  
+
+### apoptosis_signature 
+
+---
+
+
+**Description**  
+Apoptosis score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 6 genes known to be associated with apoptosis. This score is a measure of apoptotic activity. Higher score represents more apoptosis.  
+
+**Usage**  
+apoptosis_signature(z_score_matrix_file)
+
+**Arguments**  
+
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+**Details**  
+
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of apoptosis scores for each tumor sample or region and a heatmap of the apoptotic scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then apoptotic score for each tumor sample is defined as mean z-scores of 6 genes involved. A list of the 6 genes, "apoptosis_geneset.txt", is included in metaITH/genesets.
+
+**Value**  
+This function returns two files:     
+1. A table of apoptosis scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Apoptosis score" shows the apoptosis score for each tumor region or sample.  Example file "Apoptosis_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
+2. A .tiff image file of a heatmap. Example file "Apoptosis_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+
+**Example** 
+
+```{r}
+apoptosis_signature("z-scores_matrix.txt")  
+read.table("Apoptosis_score.txt", sep="\t", header=T)[,1:4]  
+  
+```
+
+---  
+
+### drug_resistance_signature   
+
+---  
+
+
+**Description**  
+Drug resistance score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 23 genes that comprise of Drug resistance signature (Hou et al., 2012). This score is a measure of Pemetrexed drug resistance. Higher score represents higher resistance.  
+
+**Usage**  
+drug_resistance_signature(z_score_matrix_file)
+
+**Arguments**  
+
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+**Details**  
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Drug resistance scores for each tumor sample or region and a heatmap of the Drug resistance scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Drug resistance score for each tumor sample is defined as mean z-scores of 23 genes involved. A list of the 23 genes, "pemetrexed_resistance_geneset.txt", is included in metaITH/genesets.
+
+**Value**  
+This function returns two files:     
+1. A tab delimited .txt file with Drug resistance scores. First column is “Gene”, followed by one column for each tumor region or sample. Two rows, one for sample names, one called “Drug resistance score” shows the Drug resistance score for each tumor region or sample. Example file "Pemetrexed_resistance_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.   
+2. A .tiff image file of a heatmap. Example file "Pemetrexed_resistance_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.  
+
+
+**Example**  
+
+```{r}
+drug_resistance_signature("z-scores_matrix.txt")  
+read.table("Pemetrexed_resistance_score.txt", sep="\t", header=T)[,1:4]  
+
+```
+
+---  
+
+### emt_signature   
+
+---  
+
+**Description**  
+EMT score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 60 genes that comprise of EMT signature (Ramaker et al., 2017). This gene signature includes 49 epithelial related genes (e-genes) and 11 mesenchymal related genes (m-genes). This score is a measure of epithelial/mesenchymal nature of the tumor. Higher score represents more mesenchymal like features.  
+
+**Usage**  
+emt_signature(z_score_matrix_file)
+
+**Arguments**  
+
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+**Details**  
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of EMT scores for each tumor sample and a heatmap of the EMT scores. For each of e-genes and m-genes, z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then EMT score for each tumor sample is defined as:    
+EM score = av. Z-score of m-genes – av. z-score of e-genes    
+A list of the 49 epithelial genes, "epithelial_geneset.txt", and a list of the 11 mesenchymal genes, "mesenchymal_geneset.txt" is included in metaITH/genesets.
+
+**Value**  
+This function returns three files:    
+1. A table of emt scores. First column is "Gene", followed by one column for each tumor region or sample. Three rows, one for sample names, one called "Epithelial score" shows the epithelial score for each tumor region or sample, one called "Mesenchymal score" shows the mesenchymal score for each tumor region or sample. Example file "Epithelial_Mesenchymal_scores.txt" can be seen under metaITH/output_files/sig_analysis_outputs.   
+2. A table of mesenchymal-epithelial scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "M-E score" shows the mesenchymal-epithelial score for each tumor region or sample.  Example file "Mesenchymal-Epithelial_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+3. A .tiff image file of a heatmap. Example file "Mesenchymal-Epithelial_score_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+**Example**  
+
+```{r}
+emt_signature("z-scores_matrix.txt")
+
+read.table("Mesenchymal-Epithelial_score.txt", sep="\t", header=T)[,1:4]
+```
+
+---  
+
+### hypoxia_signature   
+
+---  
+
+
+**Description**   
+Hypoxia score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 21 genes that comprise of Hypoxia signature (Buffa et al., 2010). This score is a measure of extent of hypoxia in tumors. Higher score represents more hypoxia.  
+
+**Usage**  
+hypoxia_signature(z_score_matrix_file)  
+
+**Arguments**   
+
+* z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions. Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+**Details**  
+ Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Hypoxia scores for each tumor sample or region and a heatmap of the Hypoxia scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Hypoxia score for each tumor sample is defined as mean z-scores of the genes involved. A list of the 21 genes involved, "hypoxia_geneset.txt", is included in metaITH/genesets.
+
+**Value**  
+This function returns two files:    
+1. A table of hypoxia scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Hypoxia score" shows the hypoxia score for each tumor region or sample. Example file "Hypoxia_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.    
+2. A .tiff image file of a heatmap. Example file "Hypoxia_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+**Example** 
+
+```{r}
+hypoxia_signature("z-scores_matrix.txt")
+
+read.table("Hypoxia_score.txt", sep="\t", header=T)[,1:4]
+```
+
+---  
+
+### proliferation_signature   
+
+---  
+
+**Description**  
+Proliferation score is calculated for each tumor sample using gene expression data [log2 (TPM+1)] for 121 genes that comprise of Proliferation signature (Wilkerson et al., 2012). This score is a measure of proliferation potential. Higher score represents higher proliferation potential. 
+
+**Usage**   
+proliferation_signature(z_score_matrix_file)  
+
+**Arguments**   
+
+*    z_score_matrix_file: A matrix of z-scores for all genes in all tumor samples and regions.  Running the function “z_score_calculations” will create this file. Example file "z-scores_matrix.txt" can be seen under metaITH/output_files/sig_analysis_outputs. 
+
+**Details**  
+Takes in a z-score matrix created by function z_score_calculations. Outputs a table of Proliferation scores for each tumor sample and a heatmap of the Proliferation scores. For each gene, Z- scores corresponding to its expression in tumor is calculated based on mean and standard deviation of its expression in the normal samples, and then Proliferation score for each tumor sample is defined as mean z-scores of the genes involved. A list of the 121 genes involved, "proliferation_geneset.txt", is included in metaITH/genesets.
+
+**Value**  
+This function returns two files:    
+1. A table of proliferation scores. First column is "Gene", followed by one column for each tumor region or sample. Two rows, one for sample names, one called "Proliferation score" shows the proliferation score for each tumor region or sample. Example file "Proliferation_score.txt" can be seen under metaITH/output_files/sig_analysis_outputs.  
+2. A .tiff image file of a heatmap. Example file "Proliferation_scores_heatmap.tiff" can be seen under metaITH/output_files/sig_analysis_outputs.
+
+
+**Example** 
+
+```{r}
+proliferation_signature("z-scores_matrix.txt")
+read.table("Proliferation_score.txt", sep="\t", header=T)[,1:4]
+```
+
+
 \newpage
 
 # Index  
-Phylograms  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dna_phylograms, 10  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immune_phylograms, 10  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rna_phylograms, 11  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snv_heatmaps, 12  
+Dendrograms  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dna_dendrograms, 6  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immune_dendrograms, 7  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rna_dendrograms, 9  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snv_heatmaps, 9  
 Signatures  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anti_pd1_favor_signature, 2  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apoptosis_signature, 3  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drug_resistance_signature, 4  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emt_signature, 5  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hypoxia_signature, 6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proliferation_signature, 6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signature_analyis, 8  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specified_geneset_analysis, 7  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z_score_calculations, 2  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signature_analyis, 2  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specified_geneset_analysis, 5  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z_score_calculations, 4  
 Multi-Level Divergence and Diversity  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_level_divergence_diversity, 13  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_level_divergence_diversity, 9  
 Utilities  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metaITH_analysis, 14  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metaITH_analysis, 10  
+Signature Utilities   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anti_pd1_favor_signature, 14  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apoptosis_signature, 15   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drug_resistance_signature, 16   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emt_signature, 17   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hypoxia_signature, 18   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proliferation_signature, 18   
 
 \newpage
 
