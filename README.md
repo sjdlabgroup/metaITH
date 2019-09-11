@@ -36,7 +36,7 @@ z_score_calculations("RNA_matrix.txt")
 specified_geneset_signature("z-scores_matrix.txt", "proliferation_signature.txt")
 ```
 
-## Dendrogram Analysis
+## Dendrograms
 Functions create distance matrices from DNA, RNA, or immune data and use the distance matrices to create unrooted dendrograms using neighbor-joining method, as well as SNV heatmaps.  
 
 Examples:  
